@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GUID</title>
+  <style>
+    .wrapit {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 12px;
+        background-color: #1a1a1a;
+        color: white;
+    }
+    .wrapit button {
+        height: 3rem;
+        width: 8rem;
+    }
+    body {
+        margin: 0px;
+    }
+    #toaster {
+      position: fixed;
+      height: auto;
+      vertical-align: middle;
+      top: -3rem;
+      text-align: center;
+      background-color: #333;
+      color: #fff;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      animation: slideIn 0.5s ease forwards, slideOut 0.5s ease forwards 2s;
+      display: none; /* Initially hidden */
+    }
+    #toaster p {
+        margin: 0px;
+        align-self: center;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(0);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(100%);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOut {
+      from {
+        transform: translateY(100%);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 0;
+      }
+    }
+</style>
+</head>
+<body>
+    <div class="wrapit">
+        <label for="generateButton">Press enter to copy guid to clipboard</label>
+        <button id="generateButton">Gimme GUID</button>
+
+    </div>
+    <div id="toaster">
+        <p><label id="guidDisplay"></label> copied!</p>
+    </div>
+  <script>
+    document.getElementById("generateButton").focus();
+
+    // create guid
+    function generateGUID() {
+      // Function to generate a GUID
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+          v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+    function copyAndShow() {
+        var guid = generateGUID()
+        navigator.clipboard.writeText(guid);
+        var toaster = document.getElementById("toaster");
+
+        // Display
+        document.getElementById("guidDisplay").innerText = guid;
+        toaster.style.display = "block";
+        toaster.style.left = `${(window.innerWidth - toaster.offsetWidth) / 2}px`
+        
+        // Hide the toaster after 2 seconds
+        setTimeout(() => {
+            document.getElementById("toaster").style.display = "none";
+        }, 2500);
+    }
+    document.getElementById("generateButton").addEventListener("click", 
+    () => {
+        copyAndShow();
+    })
+    document.addEventListener("keypress", (k) => {
+        if (k.keyCode === 13) {
+            copyAndShow();
+        }
+    })
+  </script>
+</body>
+</html>
+
